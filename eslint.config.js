@@ -5,6 +5,7 @@ import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import prettier from 'eslint-config-prettier';
+import globals from 'globals'; // 추가
 
 export default [
   {
@@ -16,6 +17,9 @@ export default [
       parser: tsparser,
       ecmaVersion: 2020,
       sourceType: 'module',
+      globals: {
+        ...globals.browser,
+      },
       parserOptions: {
         ecmaFeatures: {
           jsx: true,
