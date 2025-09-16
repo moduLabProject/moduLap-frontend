@@ -12,7 +12,7 @@ jobs:
       - name: Send Discord Notification for PR
         uses: Ilshidur/action-discord@master
         env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_FRONTEND_URL }}
         with:
           args: |
             🔔 **Pull Request ${{ github.event.action }}**
