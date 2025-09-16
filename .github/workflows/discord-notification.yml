@@ -8,13 +8,6 @@ jobs:
   notify-discord:
     runs-on: ubuntu-latest
     steps:
-      - name: Check if Discord webhook is configured
-        run: |
-          if [ -z "${{ secrets.DISCORD_WEBHOOK_URL }}" ]; then
-            echo "DISCORD_WEBHOOK_URL secret is not set"
-            exit 1
-          fi
-
       - name: Send Discord Notification for PR
         uses: Ilshidur/action-discord@master
         env:
@@ -26,6 +19,6 @@ jobs:
             **Repository:** ${{ github.repository }}
             **PR Title:** ${{ github.event.pull_request.title }}
             **Author:** ${{ github.event.pull_request.user.login }}
-            **Branch:** `${{ github.event.pull_request.head.ref }}` → `{{ github.event.pull_request.base.ref }}`
+            **Branch:** `${{ github.event.pull_request.head.ref }}` → `${{ github.event.pull_request.base.ref }}`
 
             **링크:** ${{ github.event.pull_request.html_url }}
