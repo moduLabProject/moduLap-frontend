@@ -1,8 +1,9 @@
 name: Discord Notification
 
 on:
-  pull_request:
-    types: [opened, closed, reopened, ready_for_review]
+  pull_request_target:
+    branches: [main, develop]
+    types: [opened, synchronize, reopened]
 
 jobs:
   notify-discord:
