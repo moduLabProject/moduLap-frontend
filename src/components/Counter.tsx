@@ -6,6 +6,8 @@ import {
   incrementByAmount,
 } from '../store/slices/counterSlice';
 
+import { Button } from './ui/Button';
+
 const Counter = () => {
   const count = useAppSelector((state) => state.counter.value);
   const dispatch = useAppDispatch();
@@ -35,6 +37,13 @@ const Counter = () => {
         >
           +5
         </button>
+
+        <Button
+          primary
+          label="+10"
+          onClick={() => dispatch(incrementByAmount(10))}
+          className="w-20"
+        />
       </div>
     </div>
   );
