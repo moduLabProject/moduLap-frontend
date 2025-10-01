@@ -8,6 +8,7 @@ import {
 
 import { Button } from './ui/Button';
 import { Input } from './ui/input';
+import { Checkbox } from './ui/Checkbox';
 
 const Counter = () => {
   const count = useAppSelector((state) => state.counter.value);
@@ -47,6 +48,7 @@ const Counter = () => {
         />
       </div>
       <Input placeholder="placeholder" size="medium" className="w-full" />
+      <Checkbox label="Checkbox" size="medium" />
     </div>
   );
 };
