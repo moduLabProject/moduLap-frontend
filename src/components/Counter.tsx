@@ -6,6 +6,10 @@ import {
   incrementByAmount,
 } from '../store/slices/counterSlice';
 
+import { Button } from './ui/Button';
+import { Input } from './ui/Input';
+import { Checkbox } from './ui/Checkbox';
+
 const Counter = () => {
   const count = useAppSelector((state) => state.counter.value);
   const dispatch = useAppDispatch();
@@ -35,7 +39,16 @@ const Counter = () => {
         >
           +5
         </button>
+
+        <Button
+          primary
+          label="+10"
+          onClick={() => dispatch(incrementByAmount(10))}
+          className="w-20"
+        />
       </div>
+      <Input placeholder="placeholder" size="medium" className="w-full" />
+      <Checkbox label="Checkbox" size="medium" />
     </div>
   );
 };
