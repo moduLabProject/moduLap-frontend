@@ -7,6 +7,7 @@ import {
 } from '../store/slices/counterSlice';
 
 import { Button } from './ui/Button';
+import { Input } from './ui/input';
 
 const Counter = () => {
   const count = useAppSelector((state) => state.counter.value);
@@ -45,6 +46,7 @@ const Counter = () => {
           className="w-20"
         />
       </div>
+      <Input placeholder="placeholder" size="medium" className="w-full" />
     </div>
   );
 };
