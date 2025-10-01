@@ -7,7 +7,7 @@ import {
 } from '../store/slices/counterSlice';
 
 import { Button } from './ui/Button';
-import { Input } from './ui/input';
+import { Input } from './ui/Input';
 import { Checkbox } from './ui/Checkbox';
 
 const Counter = () => {
