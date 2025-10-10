@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 export interface CheckboxProps {
+  id?: string;
   checked?: boolean;
   disabled?: boolean;
   size?: 'small' | 'medium' | 'large';
