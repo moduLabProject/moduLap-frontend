@@ -5,6 +5,8 @@ import { Button } from '../components/ui/Button';
 import { Checkbox } from '../components/ui/Checkbox';
 import { SelectBox } from '../components/ui/Selectbox';
 
+import { ChevronRight } from 'lucide-react';
+
 interface LabeledInputProps {
   id?: string;
   label: string;
@@ -56,6 +58,12 @@ export function Signup() {
   const [userType, setUserType] = useState<'일반회원' | '작가' | '소품샵'>(
     '일반회원'
   );
+
+  const [openTerms, setOpenTerms] = useState<{ [key: string]: boolean }>({});
+
+  const toggleTerm = (termKey: string) => {
+    setOpenTerms((prev) => ({ ...prev, [termKey]: !prev[termKey] }));
+  };
 
   return (
     <div className="flex w-screen flex-col items-center gap-4 p-4">
@@ -157,23 +165,62 @@ export function Signup() {
               label="전체동의"
               className="border-b border-gray-300 pb-2"
             />
-            <Checkbox id="agree-age" label="만 14세 이상입니다 (필수)" />
-            <Checkbox id="agree-terms" label="이용약관 (필수)" />
+            <div className="flex justify-between">
+              <Checkbox id="agree-age" label="만 14세 이상입니다 (필수)" />
+              <ChevronRight
+                className="cursor-pointer"
+                onClick={() => toggleTerm('age')}
+              />
+            </div>
+            {openTerms.age && (
+              <p className="text-sm text-gray-600">{'내용'.repeat(100)}</p>
+            )}
+
+            <div className="flex justify-between">
+              <Checkbox id="agree-terms" label="이용약관 (필수)" />
+              <ChevronRight
+                className="cursor-pointer"
+                onClick={() => toggleTerm('terms')}
+              />
+            </div>
+            {openTerms.terms && (
+              <p className="text-sm text-gray-600">{'내용'.repeat(100)}</p>
+            )}
 
             {userType !== '일반회원' && (
               <>
-                <Checkbox
-                  id="agree-business-info"
-                  label="사업자 정보 확인 및 등록 동의 (필수)"
-                />
+                <div className="flex justify-between">
+                  <Checkbox
+                    id="agree-business-info"
+                    label="사업자 정보 확인 및 등록 동의 (필수)"
+                  />
+                  <ChevronRight
+                    className="cursor-pointer"
+                    onClick={() => toggleTerm('business-info')}
+                  />
+                </div>
+                {openTerms['business-info'] && (
+                  <p className="text-sm text-gray-600">{'내용'.repeat(100)}</p>
+                )}
+
                 <Checkbox
                   id="agree-settlement"
                   label="정산 및 수수료 정책 동의 (필수)"
                 />
-                <Checkbox
-                  id="agree-fraud"
-                  label="부정거래 방지 및 제재 정책 동의 (필수)"
-                />
+                <div className="flex justify-between">
+                  <Checkbox
+                    id="agree-fraud"
+                    label="부정거래 방지 및 제재 정책 동의 (필수)"
+                  />
+                  <ChevronRight
+                    className="cursor-pointer"
+                    onClick={() => toggleTerm('fraud')}
+                  />
+                </div>
+                {openTerms['fraud'] && (
+                  <p className="text-sm text-gray-600">{'내용'.repeat(100)}</p>
+                )}
+
                 <Checkbox
                   id="agree-customer-data"
                   label="고객 리뷰 및 데이터 활용 동의 (필수)"
