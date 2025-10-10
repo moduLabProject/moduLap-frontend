@@ -35,7 +35,6 @@ interface LabeledInputWithButtonProps {
   buttonLabel: string;
   onButtonClick?: () => void;
   placeholder?: string;
-  readOnly?: boolean;
 }
 
 const LabeledInputWithButton = ({
@@ -45,18 +44,11 @@ const LabeledInputWithButton = ({
   buttonLabel,
   onButtonClick,
   placeholder,
-  readOnly = false,
 }: LabeledInputWithButtonProps) => (
   <div className="flex flex-col gap-1">
     <label htmlFor={id}>{label}</label>
     <div className="flex w-full gap-2">
-      <Input
-        id={id}
-        type={type}
-        placeholder={placeholder}
-        className="flex-1"
-        readOnly={readOnly}
-      />
+      <Input id={id} type={type} placeholder={placeholder} className="flex-1" />
       <Button label={buttonLabel} className="w-32" onClick={onButtonClick} />
     </div>
   </div>
@@ -71,6 +63,40 @@ export function Signup() {
 
   const toggleTerm = (termKey: string) => {
     setOpenTerms((prev) => ({ ...prev, [termKey]: !prev[termKey] }));
+  };
+
+  const [agreements, setAgreements] = useState({
+    all: false,
+    age: false,
+    terms: false,
+    businessInfo: false,
+    settlement: false,
+    fraud: false,
+    customerData: false,
+    marketing: false,
+    notification: false,
+  });
+
+  const handleCheckboxChange = (key: keyof typeof agreements) => {
+    setAgreements((prev) => {
+      const newAgreements = { ...prev, [key]: !prev[key] };
+
+      const allChecked = Object.entries(newAgreements)
+        .filter(([k]) => k !== 'all')
+        .every(([, v]) => v);
+
+      newAgreements.all = allChecked;
+      return newAgreements;
+    });
+  };
+
+  const handleAllAgree = () => {
+    setAgreements((prev) => {
+      const newValue = !prev.all;
+      return Object.fromEntries(
+        Object.keys(prev).map((key) => [key, newValue])
+      ) as typeof prev;
+    });
   };
 
   return (
@@ -151,7 +177,6 @@ export function Signup() {
               id="businessCert"
               label="사업자등록증 업로드"
               buttonLabel="업로드"
-              readOnly
             />
 
             <div className="flex w-full flex-col gap-2">
@@ -172,10 +197,18 @@ export function Signup() {
             <Checkbox
               id="agree-all"
               label="전체동의"
+              checked={agreements.all}
+              onChange={handleAllAgree}
               className="border-b border-gray-300 pb-2"
             />
+
             <div className="flex justify-between">
-              <Checkbox id="agree-age" label="만 14세 이상입니다 (필수)" />
+              <Checkbox
+                id="agree-age"
+                label="만 14세 이상입니다 (필수)"
+                checked={agreements.age}
+                onChange={() => handleCheckboxChange('age')}
+              />
               <ChevronRight
                 className="cursor-pointer"
                 onClick={() => toggleTerm('age')}
@@ -186,7 +219,12 @@ export function Signup() {
             )}
 
             <div className="flex justify-between">
-              <Checkbox id="agree-terms" label="이용약관 (필수)" />
+              <Checkbox
+                id="agree-terms"
+                label="이용약관 (필수)"
+                checked={agreements.terms}
+                onChange={() => handleCheckboxChange('terms')}
+              />
               <ChevronRight
                 className="cursor-pointer"
                 onClick={() => toggleTerm('terms')}
@@ -202,48 +240,79 @@ export function Signup() {
                   <Checkbox
                     id="agree-business-info"
                     label="사업자 정보 확인 및 등록 동의 (필수)"
+                    checked={agreements.businessInfo}
+                    onChange={() => handleCheckboxChange('businessInfo')}
                   />
                   <ChevronRight
                     className="cursor-pointer"
-                    onClick={() => toggleTerm('business-info')}
+                    onClick={() => toggleTerm('businessInfo')}
                   />
                 </div>
-                {openTerms['business-info'] && (
+                {openTerms.businessInfo && (
                   <p className="text-sm text-gray-600">{'내용'.repeat(100)}</p>
                 )}
 
-                <Checkbox
-                  id="agree-settlement"
-                  label="정산 및 수수료 정책 동의 (필수)"
-                />
+                <div className="flex justify-between">
+                  <Checkbox
+                    id="agree-settlement"
+                    label="정산 및 수수료 정책 동의 (필수)"
+                    checked={agreements.settlement}
+                    onChange={() => handleCheckboxChange('settlement')}
+                  />
+                  <ChevronRight
+                    className="cursor-pointer"
+                    onClick={() => toggleTerm('settlement')}
+                  />
+                </div>
+                {openTerms.settlement && (
+                  <p className="text-sm text-gray-600">{'내용'.repeat(100)}</p>
+                )}
+
                 <div className="flex justify-between">
                   <Checkbox
                     id="agree-fraud"
                     label="부정거래 방지 및 제재 정책 동의 (필수)"
+                    checked={agreements.fraud}
+                    onChange={() => handleCheckboxChange('fraud')}
                   />
                   <ChevronRight
                     className="cursor-pointer"
                     onClick={() => toggleTerm('fraud')}
                   />
                 </div>
-                {openTerms['fraud'] && (
+                {openTerms.fraud && (
                   <p className="text-sm text-gray-600">{'내용'.repeat(100)}</p>
                 )}
 
-                <Checkbox
-                  id="agree-customer-data"
-                  label="고객 리뷰 및 데이터 활용 동의 (필수)"
-                />
+                <div className="flex justify-between">
+                  <Checkbox
+                    id="agree-customer-data"
+                    label="고객 리뷰 및 데이터 활용 동의 (필수)"
+                    checked={agreements.customerData}
+                    onChange={() => handleCheckboxChange('customerData')}
+                  />
+                  <ChevronRight
+                    className="cursor-pointer"
+                    onClick={() => toggleTerm('customerData')}
+                  />
+                </div>
+                {openTerms.customerData && (
+                  <p className="text-sm text-gray-600">{'내용'.repeat(100)}</p>
+                )}
               </>
             )}
 
             <Checkbox
               id="agree-marketing"
               label="개인정보 마케팅 활용동의 (선택)"
+              checked={agreements.marketing}
+              onChange={() => handleCheckboxChange('marketing')}
             />
             <Checkbox
               id="agree-notification"
               label="이벤트, 쿠폰, 특가 알림 메일 및 sms 등 수신 (선택)"
+              checked={agreements.notification}
+              onChange={() => handleCheckboxChange('notification')}
             />
           </div>
         </div>
