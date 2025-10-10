@@ -6,6 +6,7 @@ export interface InputProps {
   disabled?: boolean;
   value?: string;
   className?: string;
+  readOnly?: boolean;
 }
 
 export const Input = ({

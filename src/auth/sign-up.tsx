@@ -35,6 +35,7 @@ interface LabeledInputWithButtonProps {
   buttonLabel: string;
   onButtonClick?: () => void;
   placeholder?: string;
+  readOnly?: boolean;
 }
 
 const LabeledInputWithButton = ({
@@ -44,11 +45,18 @@ const LabeledInputWithButton = ({
   buttonLabel,
   onButtonClick,
   placeholder,
+  readOnly = false,
 }: LabeledInputWithButtonProps) => (
   <div className="flex flex-col gap-1">
     <label htmlFor={id}>{label}</label>
     <div className="flex w-full gap-2">
-      <Input id={id} type={type} placeholder={placeholder} className="flex-1" />
+      <Input
+        id={id}
+        type={type}
+        placeholder={placeholder}
+        className="flex-1"
+        readOnly={readOnly}
+      />
       <Button label={buttonLabel} className="w-32" onClick={onButtonClick} />
     </div>
   </div>
@@ -109,12 +117,12 @@ export function Signup() {
             <div className="flex flex-col gap-1">
               <label htmlFor="shopAddress">사업자 주소지</label>
               <div className="flex w-full gap-2">
-                <Input id="shopAddress" className="w-full" />
+                <Input id="shopAddress" className="w-full" readOnly />
                 <Button label="주소찾기" className="w-32" />
               </div>
               <div className="flex w-full gap-2">
-                <Input id="shopAddressDetail1" className="w-full" />
-                <Input id="shopAddressDetail2" className="w-full" />
+                <Input id="shopAddressDetail1" className="w-full" readOnly />
+                <Input id="shopAddressDetail2" className="w-full" readOnly />
               </div>
             </div>
 
@@ -143,6 +151,7 @@ export function Signup() {
               id="businessCert"
               label="사업자등록증 업로드"
               buttonLabel="업로드"
+              readOnly
             />
 
             <div className="flex w-full flex-col gap-2">
