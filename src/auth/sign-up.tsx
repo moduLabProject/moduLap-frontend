@@ -35,6 +35,7 @@ interface LabeledInputWithButtonProps {
   buttonLabel: string;
   onButtonClick?: () => void;
   placeholder?: string;
+  className?: string;
 }
 
 const LabeledInputWithButton = ({
@@ -49,7 +50,11 @@ const LabeledInputWithButton = ({
     <label htmlFor={id}>{label}</label>
     <div className="flex w-full gap-2">
       <Input id={id} type={type} placeholder={placeholder} className="flex-1" />
-      <Button label={buttonLabel} className="w-32" onClick={onButtonClick} />
+      <Button
+        label={buttonLabel}
+        className="bg-gray-900 text-white"
+        onClick={onButtonClick}
+      />
     </div>
   </div>
 );
@@ -145,9 +150,12 @@ export function Signup() {
 
             <div className="flex flex-col gap-1">
               <label htmlFor="shopAddress">사업자 주소지</label>
-              <div className="flex w-full gap-2">
-                <Input id="shopAddress" className="w-full" readOnly />
-                <Button label="주소찾기" className="w-32" />
+              <div className="flex gap-2">
+                <Input id="shopAddress" className="w-41.5" readOnly />
+                <Button
+                  label="주소찾기"
+                  className="w-24.7 bg-gray-900 text-white"
+                />
               </div>
               <div className="flex w-full gap-2">
                 <Input id="shopAddressDetail1" className="w-full" readOnly />
