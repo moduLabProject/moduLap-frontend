@@ -120,7 +120,6 @@ export function Signup() {
       </div>
 
       <div className="flex w-full max-w-md flex-col gap-4">
-        <LabeledInput id="username" label="이름" />
         <LabeledInputWithButton
           id="userid"
           label="아이디"
@@ -128,6 +127,9 @@ export function Signup() {
         />
         <LabeledInput id="password" label="비밀번호" type="password" />
         <LabeledInput id="checkpw" label="비밀번호확인" type="password" />
+
+        {userType === '일반회원' && <LabeledInput id="username" label="이름" />}
+
         <LabeledInputWithButton
           id="phone"
           label="휴대폰번호"
@@ -138,6 +140,7 @@ export function Signup() {
         {userType !== '일반회원' && (
           <>
             <LabeledInput id="shopName" label="상호명" />
+            <LabeledInput id="username" label="대표자명" />
             <LabeledInput id="shopNumber" label="사업자 등록번호" />
 
             <div className="flex flex-col gap-1">
@@ -255,18 +258,18 @@ export function Signup() {
                 <div className="flex justify-between">
                   <Checkbox
                     id="agree-settlement"
-                    label="정산 및 수수료 정책 동의 (필수)"
+                    label="전자상거래법 및 관련 법률 준수 동의 (필수)"
                     checked={agreements.settlement}
-                    onChange={() => handleCheckboxChange('settlement')}
-                  />
-                  <ChevronRight
-                    className="cursor-pointer"
-                    onClick={() => toggleTerm('settlement')}
                   />
                 </div>
-                {openTerms.settlement && (
-                  <p className="text-sm text-gray-600">{'내용'.repeat(100)}</p>
-                )}
+
+                <div className="flex justify-between">
+                  <Checkbox
+                    id="agree-settlement"
+                    label="정산 및 수수료 정책 동의 (필수)"
+                    checked={agreements.settlement}
+                  />
+                </div>
 
                 <div className="flex justify-between">
                   <Checkbox
@@ -287,18 +290,10 @@ export function Signup() {
                 <div className="flex justify-between">
                   <Checkbox
                     id="agree-customer-data"
-                    label="고객 리뷰 및 데이터 활용 동의 (필수)"
+                    label="고객 리뷰 및 데이터 활용 동의 (선택)"
                     checked={agreements.customerData}
-                    onChange={() => handleCheckboxChange('customerData')}
-                  />
-                  <ChevronRight
-                    className="cursor-pointer"
-                    onClick={() => toggleTerm('customerData')}
                   />
                 </div>
-                {openTerms.customerData && (
-                  <p className="text-sm text-gray-600">{'내용'.repeat(100)}</p>
-                )}
               </>
             )}
 
@@ -306,13 +301,11 @@ export function Signup() {
               id="agree-marketing"
               label="개인정보 마케팅 활용동의 (선택)"
               checked={agreements.marketing}
-              onChange={() => handleCheckboxChange('marketing')}
             />
             <Checkbox
               id="agree-notification"
               label="이벤트, 쿠폰, 특가 알림 메일 및 sms 등 수신 (선택)"
               checked={agreements.notification}
-              onChange={() => handleCheckboxChange('notification')}
             />
           </div>
         </div>
