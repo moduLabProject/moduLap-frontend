@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 export interface CheckboxProps {
+  id?: string;
   checked?: boolean;
   disabled?: boolean;
   size?: 'small' | 'medium' | 'large';
@@ -18,8 +19,6 @@ export const Checkbox = ({
   onChange,
   ...props
 }: CheckboxProps) => {
-  const [internalChecked, setInternalChecked] = React.useState(checked);
-
   const sizeClasses = {
     small: 'w-4 h-4',
     medium: 'w-5 h-5',
@@ -32,7 +31,6 @@ export const Checkbox = ({
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (disabled) return;
-    setInternalChecked(e.target.checked);
     onChange?.(e.target.checked);
   };
 
@@ -40,19 +38,13 @@ export const Checkbox = ({
     <label className={`inline-flex items-center space-x-2 ${className || ''}`}>
       <input
         type="checkbox"
-        checked={internalChecked}
+        checked={checked}
         disabled={disabled}
         onChange={handleChange}
         className={`${sizeClasses[size]} ${disabledClasses} rounded transition-colors duration-200 focus:ring-2 focus:ring-blue-500 focus:ring-offset-1`}
         {...props}
       />
-      {label && (
-        <span
-          className={`${disabled ? 'text-gray-400' : 'text-gray-900'} select-none`}
-        >
-          {label}
-        </span>
-      )}
+      {label && <span>{label}</span>}
     </label>
   );
 };
