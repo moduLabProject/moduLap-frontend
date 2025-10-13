@@ -44,13 +44,7 @@ export const Checkbox = ({
         className={`${sizeClasses[size]} ${disabledClasses} rounded transition-colors duration-200 focus:ring-2 focus:ring-blue-500 focus:ring-offset-1`}
         {...props}
       />
-      {label && (
-        <span
-          className={`${disabled ? 'text-gray-400' : 'text-gray-900'} select-none`}
-        >
-          {label}
-        </span>
-      )}
+      {label && <span>{label}</span>}
     </label>
   );
 };

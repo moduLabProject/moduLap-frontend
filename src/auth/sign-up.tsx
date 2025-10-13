@@ -204,7 +204,7 @@ export function Signup() {
 
         <div className="flex flex-col gap-1">
           <span className="font-medium">약관동의</span>
-          <div className="flex flex-col gap-2 border bg-gray-200 p-3">
+          <div className="flex flex-col gap-2 border bg-gray-900 p-3 text-white">
             <Checkbox
               id="agree-all"
               label="전체동의"
