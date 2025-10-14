@@ -50,11 +50,7 @@ const LabeledInputWithButton = ({
     <label htmlFor={id}>{label}</label>
     <div className="flex w-full gap-2">
       <Input id={id} type={type} placeholder={placeholder} className="flex-1" />
-      <Button
-        label={buttonLabel}
-        className="bg-gray-900 text-white"
-        onClick={onButtonClick}
-      />
+      <Button label={buttonLabel} variant="primary" onClick={onButtonClick} />
     </div>
   </div>
 );
@@ -158,10 +154,7 @@ export function Signup() {
               <label htmlFor="shopAddress">사업자 주소지</label>
               <div className="flex gap-2">
                 <Input id="shopAddress" className="w-41.5" readOnly />
-                <Button
-                  label="주소찾기"
-                  className="w-24.7 bg-gray-900 text-white"
-                />
+                <Button label="주소찾기" variant="primary" />
               </div>
               <div className="flex w-full gap-2">
                 <Input id="shopAddressDetail1" className="w-full" readOnly />
@@ -325,22 +318,13 @@ export function Signup() {
         </div>
 
         {userType === '일반회원' && (
-          <Button
-            label="회원가입하기"
-            className="w-full bg-gray-900 text-white"
-          />
+          <Button label="회원가입하기" variant="primary" />
         )}
         {userType === '작가' && (
-          <Button
-            label="작가 등록 신청"
-            className="w-full bg-gray-900 text-white"
-          />
+          <Button label="작가 등록 신청" variant="primary" />
         )}
         {userType === '소품샵' && (
-          <Button
-            label="소품샵 등록 신청"
-            className="w-full bg-gray-900 text-white"
-          />
+          <Button label="소품샵 등록 신청" variant="primary" />
         )}
       </div>
     </div>
