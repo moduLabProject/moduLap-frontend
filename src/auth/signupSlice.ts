@@ -30,7 +30,6 @@ interface TermItem {
   showForUserTypes: UserType[];
 }
 
-// 초기 약관 상태를 명확하게 정의합니다.
 const initialOpenTerms: Record<AgreementKey, boolean> = {
   all: false,
   age: false,
