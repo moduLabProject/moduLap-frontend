@@ -13,6 +13,7 @@ export const Button = ({
   size = 'medium',
   backgroundColor,
   label,
+  onClick,
   className = '',
   isActive = false,
   ...props
@@ -38,6 +39,7 @@ export const Button = ({
       type="button"
       className={`${baseClasses} ${sizeClasses[size]} ${variantClasses[variant]} ${className}`}
       style={backgroundColor ? { backgroundColor } : undefined}
+      onClick={onClick}
       {...props}
     >
       {label}
