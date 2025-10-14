@@ -1,5 +1,5 @@
 export interface ButtonProps {
-  primary?: boolean;
+  variant?: 'primary' | 'secondary' | 'outline';
   backgroundColor?: string;
   size?: 'small' | 'medium' | 'large';
   label: string;
@@ -8,14 +8,15 @@ export interface ButtonProps {
 }
 
 export const Button = ({
-  primary = false,
+  variant = 'primary',
   size = 'medium',
   backgroundColor,
   label,
+  className = '',
   ...props
 }: ButtonProps) => {
   const baseClasses =
-    'font-semibold rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2';
+    '  font-semibold transition-colors duration-200 focus:outline-none focus:ring-2 border focus:ring-offset-2';
 
   const sizeClasses = {
     small: 'px-3 py-1.5 text-sm',
@@ -23,14 +24,16 @@ export const Button = ({
     large: 'px-6 py-3 text-lg',
   };
 
-  const variantClasses = primary
-    ? 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500'
-    : 'bg-gray-200 text-gray-800 hover:bg-gray-300 focus:ring-gray-500';
+  const variantClasses = {
+    primary: 'bg-gray-900 text-white rounded-lg',
+    secondary: 'bg-gray-900 text-white rounded-none',
+    outline: 'border-gray-900 text-gray-900 rounded-lg',
+  };
 
   return (
     <button
       type="button"
-      className={`${baseClasses} ${sizeClasses[size]} ${variantClasses}`}
+      className={`${baseClasses} ${sizeClasses[size]} ${variantClasses[variant]} ${className}`}
       style={backgroundColor ? { backgroundColor } : undefined}
       {...props}
     >
