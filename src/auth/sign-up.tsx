@@ -1,16 +1,105 @@
-import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { ChevronRight } from 'lucide-react';
 
 import { Input } from '../components/ui/Input';
 import { Button } from '../components/ui/Button';
 import { Checkbox } from '../components/ui/Checkbox';
 import { SelectBox } from '../components/ui/Selectbox';
+import {
+  setUserType,
+  toggleTerm,
+  setAgreement,
+  setAllAgreements,
+  initialState as signupInitialState,
+} from './signupSlice';
+import type { RootState } from '../store/index';
 
-import { ChevronRight } from 'lucide-react';
+type UserType = '일반회원' | '작가' | '소품샵';
+type AgreementKey =
+  | 'all'
+  | 'age'
+  | 'terms'
+  | 'businessInfo'
+  | 'settlement'
+  | 'fraud'
+  | 'customerData'
+  | 'marketing'
+  | 'notification';
+
+const USER_TYPES: { value: UserType; label: string }[] = [
+  { value: '일반회원', label: '일반회원' },
+  { value: '작가', label: '작가' },
+  { value: '소품샵', label: '소품샵' },
+];
+
+interface TermItem {
+  key: AgreementKey;
+  label: string;
+  hasDetail: boolean;
+  showForUserTypes: UserType[];
+}
+
+const TERMS: TermItem[] = [
+  {
+    key: 'age',
+    label: '만 14세 이상입니다 (필수)',
+    hasDetail: true,
+    showForUserTypes: ['일반회원', '작가', '소품샵'],
+  },
+  {
+    key: 'terms',
+    label: '이용약관 (필수)',
+    hasDetail: true,
+    showForUserTypes: ['일반회원', '작가', '소품샵'],
+  },
+  {
+    key: 'businessInfo',
+    label: '사업자 정보 확인 및 등록 동의 (필수)',
+    hasDetail: true,
+    showForUserTypes: ['작가', '소품샵'],
+  },
+  {
+    key: 'settlement',
+    label: '정산 및 수수료 정책 동의 (필수)',
+    hasDetail: false,
+    showForUserTypes: ['작가', '소품샵'],
+  },
+  {
+    key: 'fraud',
+    label: '부정거래 방지 및 제재 정책 동의 (필수)',
+    hasDetail: true,
+    showForUserTypes: ['작가', '소품샵'],
+  },
+  {
+    key: 'customerData',
+    label: '고객 리뷰 및 데이터 활용 동의 (선택)',
+    hasDetail: false,
+    showForUserTypes: ['작가', '소품샵'],
+  },
+  {
+    key: 'marketing',
+    label: '개인정보 마케팅 활용동의 (선택)',
+    hasDetail: false,
+    showForUserTypes: ['일반회원', '작가', '소품샵'],
+  },
+  {
+    key: 'notification',
+    label: '이벤트, 쿠폰, 특가 알림 메일 및 sms 등 수신 (선택)',
+    hasDetail: false,
+    showForUserTypes: ['일반회원', '작가', '소품샵'],
+  },
+];
+
+const SUBMIT_BUTTON_LABELS: Record<UserType, string> = {
+  일반회원: '회원가입하기',
+  작가: '작가 등록 신청',
+  소품샵: '소품샵 등록 신청',
+};
 
 interface LabeledInputProps {
   id?: string;
   label: string;
-  type?: 'text' | 'password' | 'number' | 'email' | 'tel';
+  type?: 'text' | 'password' | 'email' | 'tel';
   placeholder?: string;
   className?: string;
 }
@@ -19,23 +108,18 @@ const LabeledInput = ({
   id,
   label,
   type = 'text',
-  className,
+  className = '',
   placeholder,
 }: LabeledInputProps) => (
-  <div className={`flex flex-col gap-1 ${className || ''}`}>
+  <div className={`flex flex-col gap-1 ${className}`}>
     <label htmlFor={id}>{label}</label>
     <Input id={id} type={type} placeholder={placeholder} className="w-full" />
   </div>
 );
 
-interface LabeledInputWithButtonProps {
-  id?: string;
-  label: string;
-  type?: 'text' | 'password' | 'number' | 'email' | 'tel';
+interface LabeledInputWithButtonProps extends LabeledInputProps {
   buttonLabel: string;
   onButtonClick?: () => void;
-  placeholder?: string;
-  className?: string;
 }
 
 const LabeledInputWithButton = ({
@@ -55,75 +139,63 @@ const LabeledInputWithButton = ({
   </div>
 );
 
+interface TermItemProps {
+  term: TermItem;
+  checked: boolean;
+  isOpen: boolean;
+  onCheck: (isChecked: boolean) => void;
+  onToggle: () => void;
+}
+
+const TermItemComponent = ({
+  term,
+  checked,
+  isOpen,
+  onCheck,
+  onToggle,
+}: TermItemProps) => (
+  <>
+    <div className="flex justify-between">
+      <Checkbox
+        id={`agree-${term.key}`}
+        label={term.label}
+        checked={checked}
+        onChange={onCheck}
+      />
+      {term.hasDetail && (
+        <ChevronRight className="cursor-pointer" onClick={onToggle} />
+      )}
+    </div>
+    {isOpen && term.hasDetail && (
+      <p className="text-sm text-gray-600">{'내용'.repeat(50)}</p>
+    )}
+  </>
+);
+
 export function Signup() {
-  const [userType, setUserType] = useState<'일반회원' | '작가' | '소품샵'>(
-    '일반회원'
+  const dispatch = useDispatch();
+  const { userType, openTerms, agreements } = useSelector(
+    (state: RootState) => state.signup ?? signupInitialState
   );
 
-  const [openTerms, setOpenTerms] = useState<{ [key: string]: boolean }>({});
-
-  const toggleTerm = (termKey: string) => {
-    setOpenTerms((prev) => ({ ...prev, [termKey]: !prev[termKey] }));
-  };
-
-  const [agreements, setAgreements] = useState({
-    all: false,
-    age: false,
-    terms: false,
-    businessInfo: false,
-    settlement: false,
-    fraud: false,
-    customerData: false,
-    marketing: false,
-    notification: false,
-  });
-
-  const handleCheckboxChange = (key: keyof typeof agreements) => {
-    setAgreements((prev) => {
-      const newAgreements = { ...prev, [key]: !prev[key] };
-
-      const allChecked = Object.entries(newAgreements)
-        .filter(([k]) => k !== 'all')
-        .every(([, v]) => v);
-
-      newAgreements.all = allChecked;
-      return newAgreements;
-    });
-  };
-
-  const handleAllAgree = () => {
-    setAgreements((prev) => {
-      const newValue = !prev.all;
-      return Object.fromEntries(
-        Object.keys(prev).map((key) => [key, newValue])
-      ) as typeof prev;
-    });
-  };
+  const isBusinessUser = userType !== '일반회원';
+  const visibleTerms = TERMS.filter((term) =>
+    term.showForUserTypes.includes(userType)
+  );
 
   return (
     <div className="flex w-screen flex-col items-center gap-4 p-4">
       <div className="flex w-full max-w-md gap-2">
-        <Button
-          label="일반회원"
-          variant="secondary"
-          isActive={userType === '일반회원'}
-          onClick={() => setUserType('일반회원')}
-          className="flex-1"
-        />
-        <Button
-          label="작가"
-          variant="secondary"
-          isActive={userType === '작가'}
-          onClick={() => setUserType('작가')}
-          className="flex-1"
-        />
-        <Button
-          label="소품샵"
-          variant="secondary"
-          isActive={userType === '소품샵'}
-          onClick={() => setUserType('소품샵')}
-          className="flex-1"
-        />
+        {USER_TYPES.map((type) => (
+          <Button
+            key={type.value}
+            label={type.label}
+            variant="secondary"
+            isActive={userType === type.value}
+            onClick={() => dispatch(setUserType(type.value))}
+            className="flex-1"
+          />
+        ))}
       </div>
 
       <div className="flex w-full max-w-md flex-col gap-4">
@@ -134,9 +206,7 @@ export function Signup() {
         />
         <LabeledInput id="password" label="비밀번호" type="password" />
         <LabeledInput id="checkpw" label="비밀번호확인" type="password" />
-
-        {userType === '일반회원' && <LabeledInput id="username" label="이름" />}
-
+        {!isBusinessUser && <LabeledInput id="username" label="이름" />}
         <LabeledInputWithButton
           id="phone"
           label="휴대폰번호"
@@ -144,7 +214,7 @@ export function Signup() {
           buttonLabel="인증하기"
         />
 
-        {userType !== '일반회원' && (
+        {isBusinessUser && (
           <>
             <LabeledInput id="shopName" label="상호명" />
             <LabeledInput id="username" label="대표자명" />
@@ -208,124 +278,27 @@ export function Signup() {
               id="agree-all"
               label="전체동의"
               checked={agreements.all}
-              onChange={handleAllAgree}
+              onChange={(isChecked: boolean) =>
+                dispatch(setAllAgreements(isChecked))
+              }
               className="border-b border-gray-300 pb-2"
             />
-
-            <div className="flex justify-between">
-              <Checkbox
-                id="agree-age"
-                label="만 14세 이상입니다 (필수)"
-                checked={agreements.age}
-                onChange={() => handleCheckboxChange('age')}
+            {visibleTerms.map((term) => (
+              <TermItemComponent
+                key={term.key}
+                term={term}
+                checked={agreements[term.key]}
+                isOpen={openTerms[term.key]}
+                onCheck={(isChecked: boolean) =>
+                  dispatch(setAgreement({ key: term.key, isChecked }))
+                }
+                onToggle={() => dispatch(toggleTerm(term.key))}
               />
-              <ChevronRight
-                className="cursor-pointer"
-                onClick={() => toggleTerm('age')}
-              />
-            </div>
-            {openTerms.age && (
-              <p className="text-sm text-gray-600">{'내용'.repeat(100)}</p>
-            )}
-
-            <div className="flex justify-between">
-              <Checkbox
-                id="agree-terms"
-                label="이용약관 (필수)"
-                checked={agreements.terms}
-                onChange={() => handleCheckboxChange('terms')}
-              />
-              <ChevronRight
-                className="cursor-pointer"
-                onClick={() => toggleTerm('terms')}
-              />
-            </div>
-            {openTerms.terms && (
-              <p className="text-sm text-gray-600">{'내용'.repeat(100)}</p>
-            )}
-
-            {userType !== '일반회원' && (
-              <>
-                <div className="flex justify-between">
-                  <Checkbox
-                    id="agree-business-info"
-                    label="사업자 정보 확인 및 등록 동의 (필수)"
-                    checked={agreements.businessInfo}
-                    onChange={() => handleCheckboxChange('businessInfo')}
-                  />
-                  <ChevronRight
-                    className="cursor-pointer"
-                    onClick={() => toggleTerm('businessInfo')}
-                  />
-                </div>
-                {openTerms.businessInfo && (
-                  <p className="text-sm text-gray-600">{'내용'.repeat(100)}</p>
-                )}
-
-                <div className="flex justify-between">
-                  <Checkbox
-                    id="agree-settlement"
-                    label="전자상거래법 및 관련 법률 준수 동의 (필수)"
-                    checked={agreements.settlement}
-                  />
-                </div>
-
-                <div className="flex justify-between">
-                  <Checkbox
-                    id="agree-settlement"
-                    label="정산 및 수수료 정책 동의 (필수)"
-                    checked={agreements.settlement}
-                  />
-                </div>
-
-                <div className="flex justify-between">
-                  <Checkbox
-                    id="agree-fraud"
-                    label="부정거래 방지 및 제재 정책 동의 (필수)"
-                    checked={agreements.fraud}
-                    onChange={() => handleCheckboxChange('fraud')}
-                  />
-                  <ChevronRight
-                    className="cursor-pointer"
-                    onClick={() => toggleTerm('fraud')}
-                  />
-                </div>
-                {openTerms.fraud && (
-                  <p className="text-sm text-gray-600">{'내용'.repeat(100)}</p>
-                )}
-
-                <div className="flex justify-between">
-                  <Checkbox
-                    id="agree-customer-data"
-                    label="고객 리뷰 및 데이터 활용 동의 (선택)"
-                    checked={agreements.customerData}
-                  />
-                </div>
-              </>
-            )}
-
-            <Checkbox
-              id="agree-marketing"
-              label="개인정보 마케팅 활용동의 (선택)"
-              checked={agreements.marketing}
-            />
-            <Checkbox
-              id="agree-notification"
-              label="이벤트, 쿠폰, 특가 알림 메일 및 sms 등 수신 (선택)"
-              checked={agreements.notification}
-            />
+            ))}
           </div>
         </div>
 
-        {userType === '일반회원' && (
-          <Button label="회원가입하기" variant="primary" />
-        )}
-        {userType === '작가' && (
-          <Button label="작가 등록 신청" variant="primary" />
-        )}
-        {userType === '소품샵' && (
-          <Button label="소품샵 등록 신청" variant="primary" />
-        )}
+        <Button label={SUBMIT_BUTTON_LABELS[userType]} variant="primary" />
       </div>
     </div>
   );
