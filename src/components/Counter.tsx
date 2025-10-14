@@ -41,7 +41,7 @@ const Counter = () => {
         </button>
 
         <Button
-          primary
+          variant="primary"
           label="+10"
           onClick={() => dispatch(incrementByAmount(10))}
           className="w-20"

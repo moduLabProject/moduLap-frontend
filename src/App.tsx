@@ -18,7 +18,11 @@ function MainPage() {
           moduLapProject
         </h1>
         <Counter />
-        <Button primary label="회원가입" onClick={handleSignupClick} />
+        <Button
+          variant="primary"
+          label="회원가입"
+          onClick={handleSignupClick}
+        />
       </div>
     </div>
   );
