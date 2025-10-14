@@ -5,6 +5,7 @@ export interface ButtonProps {
   label: string;
   onClick?: () => void;
   className?: string;
+  isActive?: boolean;
 }
 
 export const Button = ({
@@ -13,10 +14,10 @@ export const Button = ({
   backgroundColor,
   label,
   className = '',
+  isActive = false,
   ...props
 }: ButtonProps) => {
-  const baseClasses =
-    '  font-semibold transition-colors duration-200 focus:outline-none focus:ring-2 border focus:ring-offset-2';
+  const baseClasses = 'font-semibold transition-colors';
 
   const sizeClasses = {
     small: 'px-3 py-1.5 text-sm',
@@ -25,9 +26,11 @@ export const Button = ({
   };
 
   const variantClasses = {
-    primary: 'bg-gray-900 text-white rounded-lg',
-    secondary: 'bg-gray-900 text-white rounded-none',
-    outline: 'border-gray-900 text-gray-900 rounded-lg',
+    primary: 'bg-gray-900 text-white rounded-sm',
+    secondary: isActive
+      ? 'bg-gray-900 text-white rounded-sm'
+      : 'bg-white text-gray-900 border border-gray-900 rounded-sm',
+    outline: 'border-gray-900 text-gray-900 rounded-sm',
   };
 
   return (

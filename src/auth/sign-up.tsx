@@ -107,21 +107,26 @@ export function Signup() {
   return (
     <div className="flex w-screen flex-col items-center gap-4 p-4">
       <div className="flex w-full max-w-md gap-2">
-        {/* 버튼 컴포넌트 수정필요 */}
         <Button
-          className="flex-1 border-gray-900 text-gray-900 focus:bg-gray-900 focus:text-white"
           label="일반회원"
+          variant="secondary"
+          isActive={userType === '일반회원'}
           onClick={() => setUserType('일반회원')}
+          className="flex-1"
         />
         <Button
-          className="flex-1 border-gray-900 text-gray-900 focus:bg-gray-900 focus:text-white"
           label="작가"
+          variant="secondary"
+          isActive={userType === '작가'}
           onClick={() => setUserType('작가')}
+          className="flex-1"
         />
         <Button
-          className="flex-1 border-gray-900 text-gray-900 focus:bg-gray-900 focus:text-white"
           label="소품샵"
+          variant="secondary"
+          isActive={userType === '소품샵'}
           onClick={() => setUserType('소품샵')}
+          className="flex-1"
         />
       </div>
 
