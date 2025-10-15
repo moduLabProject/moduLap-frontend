@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import counterReducer from './slices/counterSlice'; // 예시 import
-import signupReducer from '../auth/signupSlice';
+import signupReducer from './slices/signupSlice';
 
 export const store = configureStore({
   reducer: {

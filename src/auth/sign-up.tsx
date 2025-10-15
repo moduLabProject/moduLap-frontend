@@ -11,7 +11,7 @@ import {
   setAgreement,
   setAllAgreements,
   initialState as signupInitialState,
-} from './signupSlice';
+} from '../store/slices/signupSlice';
 import type { RootState } from '../store/index';
 
 type UserType = '일반회원' | '작가' | '소품샵';
