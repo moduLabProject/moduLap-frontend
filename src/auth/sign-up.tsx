@@ -1,10 +1,10 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { ChevronRight } from 'lucide-react';
 
-import { Input } from '../components/ui/Input';
-import { Button } from '../components/ui/Button';
-import { Checkbox } from '../components/ui/Checkbox';
-import { SelectBox } from '../components/ui/Selectbox';
+import { Input } from '../components/ui/input';
+import { Button } from '../components/ui/button';
+import { Checkbox } from '../components/ui/checkbox';
+import { SelectBox } from '../components/ui/selectbox';
 
 import {
   setUserType,

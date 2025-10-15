@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { SelectBox } from './Selectbox';
+import { SelectBox } from './selectbox';
 
 const meta = {
   title: 'Example/SelectBox',

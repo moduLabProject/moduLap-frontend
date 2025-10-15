@@ -1,7 +1,7 @@
 import './App.css';
 import { Routes, Route, useNavigate } from 'react-router';
 import Counter from './components/Counter';
-import { Button } from './components/ui/Button';
+import { Button } from './components/ui/button';
 import { Signup } from './auth/sign-up';
 
 function MainPage() {
