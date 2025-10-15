@@ -160,7 +160,11 @@ const LabeledInputWithButton = ({
     <label htmlFor={id}>{label}</label>
     <div className="flex w-full gap-2">
       <Input id={id} type={type} placeholder={placeholder} className="flex-1" />
-      <Button label={buttonLabel} variant="primary" onClick={onButtonClick} />
+      <Button
+        label={buttonLabel}
+        variant="secondaryDark"
+        onClick={onButtonClick}
+      />
     </div>
   </div>
 );
@@ -243,8 +247,9 @@ export function Signup() {
           <Button
             key={type.value}
             label={type.label}
-            variant="secondary"
-            isActive={userType === type.value}
+            variant={
+              userType === type.value ? 'secondaryDark' : 'secondaryLight'
+            }
             onClick={() => dispatch(setUserType(type.value))}
             className="flex-1"
           />
@@ -279,7 +284,7 @@ export function Signup() {
                 <Input id="zipcode" value={zipcode} readOnly />
                 <Button
                   label="주소찾기"
-                  variant="primary"
+                  variant="secondaryDark"
                   onClick={openPostcode}
                 />
               </div>
@@ -366,7 +371,10 @@ export function Signup() {
           </div>
         </div>
 
-        <Button label={SUBMIT_BUTTON_LABELS[userType]} variant="primary" />
+        <Button
+          label={SUBMIT_BUTTON_LABELS[userType]}
+          variant="secondaryDark"
+        />
       </div>
     </div>
   );
