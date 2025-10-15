@@ -12,12 +12,12 @@ import {
   setAgreement,
   setAllAgreements,
   initialState as signupInitialState,
-} from '../store/slices/signupSlice';
+} from '../store/slices/signup-slice';
 
 import {
   setAddress,
   setDetailAddress,
-} from '../store/slices/signupAddressSlice';
+} from '../store/slices/signup-address-slice';
 
 import type { RootState } from '../store/index';
 
