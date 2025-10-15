@@ -6,9 +6,9 @@ import {
   incrementByAmount,
 } from '../store/slices/counterSlice';
 
-import { Button } from './ui/Button';
-import { Input } from './ui/Input';
-import { Checkbox } from './ui/Checkbox';
+import { Button } from './ui/button';
+import { Input } from './ui/input';
+import { Checkbox } from './ui/checkbox';
 
 const Counter = () => {
   const count = useAppSelector((state) => state.counter.value);
