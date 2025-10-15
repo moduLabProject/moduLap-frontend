@@ -1,3 +1,5 @@
+import React from 'react';
+
 export interface InputProps {
   id?: string;
   type?: 'text' | 'password' | 'number' | 'email' | 'tel';
@@ -6,6 +8,7 @@ export interface InputProps {
   disabled?: boolean;
   value?: string;
   className?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   readOnly?: boolean;
 }
 
