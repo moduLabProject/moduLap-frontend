@@ -5,14 +5,40 @@ import { Input } from '../components/ui/Input';
 import { Button } from '../components/ui/Button';
 import { Checkbox } from '../components/ui/Checkbox';
 import { SelectBox } from '../components/ui/Selectbox';
+
 import {
   setUserType,
   toggleTerm,
   setAgreement,
   setAllAgreements,
   initialState as signupInitialState,
-} from './signupSlice';
+} from '../store/slices/signupSlice';
+
+import {
+  setAddress,
+  setDetailAddress,
+} from '../store/slices/signupAddressSlice';
+
 import type { RootState } from '../store/index';
+
+declare global {
+  interface Window {
+    daum?: {
+      Postcode: new (options: {
+        oncomplete: (data: DaumPostcodeData) => void;
+      }) => DaumPostcode;
+    };
+  }
+}
+
+interface DaumPostcodeData {
+  zonecode: string;
+  roadAddress: string;
+}
+
+interface DaumPostcode {
+  open: () => void;
+}
 
 type UserType = '일반회원' | '작가' | '소품샵';
 type AgreementKey =
@@ -43,7 +69,7 @@ const TERMS: TermItem[] = [
   {
     key: 'age',
     label: '만 14세 이상입니다 (필수)',
-    hasDetail: true,
+    hasDetail: false,
     showForUserTypes: ['일반회원', '작가', '소품샵'],
   },
   {
@@ -79,7 +105,7 @@ const TERMS: TermItem[] = [
   {
     key: 'marketing',
     label: '개인정보 마케팅 활용동의 (선택)',
-    hasDetail: false,
+    hasDetail: true,
     showForUserTypes: ['일반회원', '작가', '소품샵'],
   },
   {
@@ -183,6 +209,33 @@ export function Signup() {
     term.showForUserTypes.includes(userType)
   );
 
+  const openPostcode = () => {
+    if (!window.daum?.Postcode) {
+      const script = document.createElement('script');
+      script.src =
+        '//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
+      script.async = true;
+      document.body.appendChild(script);
+      script.onload = () => openPostcode();
+      return;
+    }
+
+    new window.daum.Postcode({
+      oncomplete: (data: DaumPostcodeData) => {
+        dispatch(
+          setAddress({
+            zipcode: data.zonecode,
+            roadAddress: data.roadAddress,
+          })
+        );
+      },
+    }).open();
+  };
+
+  const { zipcode, roadAddress, detailAddress } = useSelector(
+    (state: RootState) => state.signupAddress
+  );
+
   return (
     <div className="flex w-screen flex-col items-center gap-4 p-4">
       <div className="flex w-full max-w-md gap-2">
@@ -223,12 +276,27 @@ export function Signup() {
             <div className="flex flex-col gap-1">
               <label htmlFor="shopAddress">사업자 주소지</label>
               <div className="flex gap-2">
-                <Input id="shopAddress" className="w-41.5" readOnly />
-                <Button label="주소찾기" variant="primary" />
+                <Input id="zipcode" value={zipcode} readOnly />
+                <Button
+                  label="주소찾기"
+                  variant="primary"
+                  onClick={openPostcode}
+                />
               </div>
               <div className="flex w-full gap-2">
-                <Input id="shopAddressDetail1" className="w-full" readOnly />
-                <Input id="shopAddressDetail2" className="w-full" readOnly />
+                <Input
+                  id="shopAddress"
+                  className="w-full"
+                  value={roadAddress}
+                  readOnly
+                />
+
+                <Input
+                  id="shopAddressDetail"
+                  value={detailAddress}
+                  onChange={(e) => dispatch(setDetailAddress(e.target.value))}
+                  className="w-full"
+                />
               </div>
             </div>
 
