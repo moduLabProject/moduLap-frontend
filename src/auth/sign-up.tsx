@@ -43,7 +43,7 @@ const TERMS: TermItem[] = [
   {
     key: 'age',
     label: '만 14세 이상입니다 (필수)',
-    hasDetail: true,
+    hasDetail: false,
     showForUserTypes: ['일반회원', '작가', '소품샵'],
   },
   {
@@ -79,7 +79,7 @@ const TERMS: TermItem[] = [
   {
     key: 'marketing',
     label: '개인정보 마케팅 활용동의 (선택)',
-    hasDetail: false,
+    hasDetail: true,
     showForUserTypes: ['일반회원', '작가', '소품샵'],
   },
   {
