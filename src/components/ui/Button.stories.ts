@@ -12,10 +12,9 @@ const meta = {
   },
   tags: ['autodocs'],
   argTypes: {
-    backgroundColor: { control: 'color' },
     variant: {
       control: { type: 'select' },
-      options: ['primary', 'secondary', 'outline'],
+      options: ['primary', 'secondaryLight', 'secondaryDark'],
     },
   },
   args: { onClick: fn() },
